@@ -1,0 +1,51 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+trigger:
+  branches:
+    exclude:
+      - '*'
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: Gradle@2
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      options: 'clean build'
+      tasks: 'test'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.11'
+      jdkArchitectureOption: 'x64'
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/build/test-results/test/*.xml'
+
+  - task: Gradle@2
+    displayName: 'Build'
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      tasks: 'build'
+
+  - task: Bash@3
+    displayName: 'Verificar cambios y hacer merge'
+    inputs:
+      targetType: 'inline'
+      script: |
+        echo "Comprobando si las pruebas pasaron..."
+        if [[ $? -eq 0 ]]; then
+          echo "Haciendo merge del pull request..."
+          git checkout main
+          git merge --no-ff origin/pull/<ID_DEL_PULL_REQUEST>
+        else
+          echo "Las pruebas fallaron. No se puede hacer el merge."
+          exit 1
+        fi
