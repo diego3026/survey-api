@@ -63,63 +63,63 @@ public class SurveyControllerTest {
 
     @Test
     public void surveyController_createSurvey_returnCreated() throws Exception {
-        SurveyRequest surveyRequest1 = SurveyRequest.builder().title("Survey 1").description("Description 1").build();
-        SurveyResponse surveyResponse1 = SurveyResponse.builder().id(1L).title("Survey 1").description("Description 1").build();
+        SurveyRequest surveyRequest = SurveyRequest.builder().title("Survey 1").description("Description 1").build();
+        SurveyResponse surveyResponse = SurveyResponse.builder().id(1L).title("Survey 1").description("Description 1").build();
 
-        given(surveyService.save(ArgumentMatchers.any(SurveyRequest.class))).willReturn(surveyResponse1);
+        given(surveyService.save(ArgumentMatchers.any(SurveyRequest.class))).willReturn(surveyResponse);
 
         ResultActions response = mockMvc.perform(post("/surveys")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(surveyRequest1)));
+                .content(objectMapper.writeValueAsString(surveyRequest)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.title", CoreMatchers.is(surveyRequest1.getTitle())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.description", CoreMatchers.is(surveyRequest1.getDescription())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", CoreMatchers.is(surveyRequest.getTitle())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description", CoreMatchers.is(surveyRequest.getDescription())));
     }
 
     @Test
     public void surveyController_getAllSurveys_returnResponseList() throws Exception {
-        SurveyResponse surveyResponse1 = SurveyResponse.builder().id(1L).title("Survey 1").description("Description 1").build();
-        when(surveyService.findAll()).thenReturn(Arrays.asList(surveyResponse1));
+        SurveyResponse surveyResponse = SurveyResponse.builder().id(1L).title("Survey 1").description("Description 1").build();
+        when(surveyService.findAll()).thenReturn(Arrays.asList(surveyResponse));
 
         ResultActions response = mockMvc.perform(get("/surveys")
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].title", CoreMatchers.is(surveyResponse1.getTitle())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].title", CoreMatchers.is(surveyResponse.getTitle())));
     }
 
     @Test
     public void surveyController_getSurveyById_returnSurveyResponse() throws Exception {
         Long surveyId = 1L;
-        SurveyResponse surveyResponse1 = SurveyResponse.builder().id(surveyId).title("Survey 1").description("Description 1").build();
+        SurveyResponse surveyResponse = SurveyResponse.builder().id(surveyId).title("Survey 1").description("Description 1").build();
 
-        when(surveyService.findById(surveyId)).thenReturn(surveyResponse1);
+        when(surveyService.findById(surveyId)).thenReturn(surveyResponse);
 
         ResultActions response = mockMvc.perform(get("/surveys/{id}", surveyId)
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.title", CoreMatchers.is(surveyResponse1.getTitle())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.description", CoreMatchers.is(surveyResponse1.getDescription())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", CoreMatchers.is(surveyResponse.getTitle())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description", CoreMatchers.is(surveyResponse.getDescription())));
     }
 
     @Test
     public void surveyController_updateSurvey_returnUpdatedSurvey() throws Exception {
         Long surveyId = 1L;
-        SurveyUpdate surveyUpdate1 = SurveyUpdate.builder().title("Survey Task").description("Updated Description").build();
-        SurveyResponse surveyResponse1 = SurveyResponse.builder().id(surveyId).title("Survey Task").description("Updated Description").build();
+        SurveyUpdate surveyUpdate = SurveyUpdate.builder().title("Survey Task").description("Updated Description").build();
+        SurveyResponse surveyResponse = SurveyResponse.builder().id(surveyId).title("Survey Task").description("Updated Description").build();
 
-        when(surveyService.update(ArgumentMatchers.eq(surveyId), ArgumentMatchers.any(SurveyUpdate.class))).thenReturn(surveyResponse1);
+        when(surveyService.update(ArgumentMatchers.eq(surveyId), ArgumentMatchers.any(SurveyUpdate.class))).thenReturn(surveyResponse);
 
         ResultActions response = mockMvc.perform(put("/surveys/{id}", surveyId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(surveyUpdate1)));
+                .content(objectMapper.writeValueAsString(surveyUpdate)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.title", CoreMatchers.is(surveyResponse1.getTitle())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.description", CoreMatchers.is(surveyResponse1.getDescription())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", CoreMatchers.is(surveyResponse.getTitle())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description", CoreMatchers.is(surveyResponse.getDescription())));
     }
 
     @Test
