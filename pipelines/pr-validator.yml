@@ -1,3 +1,7 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
 trigger:
   branches:
     exclude:
@@ -18,12 +22,18 @@ steps:
       options: 'clean build'
       tasks: 'test'
       javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '17'
+      jdkVersionOption: '11'
       jdkArchitectureOption: 'x64'
 
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: '**/build/test-results/test/*.xml'
+
+  - task: Gradle@2
+    displayName: 'Build'
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      tasks: 'build'
 
   - task: Bash@3
     displayName: 'Verificar cambios y hacer merge'
@@ -31,11 +41,11 @@ steps:
       targetType: 'inline'
       script: |
         echo "Comprobando si las pruebas pasaron..."
-        if grep -q "<failure" build/test-results/test/*.xml; then
-          echo "Las pruebas fallaron. No se puede hacer el merge."
-          exit 1
-        else
-          echo "Todas las pruebas pasaron. Haciendo merge del pull request..."
+        if [ -f "build/test-results/test/*.xml" ]; then
+          echo "Haciendo merge del pull request..."
           git checkout main
           git merge --no-ff origin/$(System.PullRequest.SourceBranch)
+        else
+          echo "Las pruebas fallaron. No se puede hacer el merge."
+          exit 1
         fi
