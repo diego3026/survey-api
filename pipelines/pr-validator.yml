@@ -16,13 +16,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - task: Gradle@2
+  - task: Gradle@3
     inputs:
       gradleWrapperFile: 'gradlew'
       options: 'clean build'
       tasks: 'test'
       javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.11'
+      jdkVersionOption: '11'
       jdkArchitectureOption: 'x64'
 
   - task: PublishTestResults@2
@@ -41,10 +41,10 @@ steps:
       targetType: 'inline'
       script: |
         echo "Comprobando si las pruebas pasaron..."
-        if [[ $? -eq 0 ]]; then
+        if [ -f "build/test-results/test/*.xml" ]; then
           echo "Haciendo merge del pull request..."
           git checkout main
-          git merge --no-ff origin/pull/<ID_DEL_PULL_REQUEST>
+          git merge --no-ff origin/$(System.PullRequest.SourceBranch)
         else
           echo "Las pruebas fallaron. No se puede hacer el merge."
           exit 1
