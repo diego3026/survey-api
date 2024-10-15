@@ -35,8 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### Extra configuration ###
-gradlew
-gradlew.bat
-gradle
