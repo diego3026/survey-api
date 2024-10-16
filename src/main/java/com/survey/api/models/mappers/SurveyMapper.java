@@ -12,5 +12,4 @@ public interface SurveyMapper {
     Survey responseToEntity(SurveyResponse surveyResponse);
     Survey updateToEntity(SurveyUpdate surveyUpdate);
     SurveyResponse entityToResponse(Survey survey);
-
 }
