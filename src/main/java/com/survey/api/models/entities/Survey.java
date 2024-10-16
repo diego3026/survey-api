@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "surveys")
 @Data
@@ -20,7 +22,10 @@ public class Survey {
     private String title;
     private String description;
 
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
+    private List<Question> questions;
+
     public void updateSurvey(Survey survey){
-        new Survey(this.id, survey.getTitle(), survey.getDescription());
+        new Survey(this.id, survey.getTitle(), survey.getDescription(),survey.getQuestions());
     }
 }
