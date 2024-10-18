@@ -22,11 +22,11 @@ public class Question{
     @Column(nullable = false)
     private String title;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "idSurvey")
     private Survey survey;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "idTypeQuestion")
     private TypeQuestion typeQuestion;
 
@@ -34,6 +34,10 @@ public class Question{
     private List<Answer> answers;
 
     public void updateQuestion(Question question) {
-        new Question(this.id, question.getTitle(), question.getSurvey(),question.getTypeQuestion(),question.getAnswers());
+        this.setId(this.id);
+        this.setTitle(question.getTitle());
+        this.setSurvey(question.getSurvey());
+        this.setTypeQuestion(question.getTypeQuestion());
+        this.setAnswers(this.getAnswers());
     }
 }

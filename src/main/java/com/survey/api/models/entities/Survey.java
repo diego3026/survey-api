@@ -26,6 +26,9 @@ public class Survey {
     private List<Question> questions;
 
     public void updateSurvey(Survey survey){
-        new Survey(this.id, survey.getTitle(), survey.getDescription(),survey.getQuestions());
+        this.setId(this.id);
+        this.setTitle(survey.getTitle());
+        this.setDescription(survey.getDescription());
+        this.setQuestions(this.getQuestions());
     }
 }

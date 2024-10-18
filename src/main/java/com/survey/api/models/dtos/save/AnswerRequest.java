@@ -1,6 +1,5 @@
 package com.survey.api.models.dtos.save;
 
-import com.survey.api.models.entities.Question;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
@@ -10,5 +9,5 @@ import lombok.Data;
 public class AnswerRequest {
     @NotBlank
     private String description;
-    private Question question;
+    private Long question;
 }

@@ -13,7 +13,6 @@ import java.util.List;
 public class QuestionResponse {
     private Long id;
     private String title;
-    private Survey survey;
-    private TypeQuestion typeQuestion;
+    private TypeQuestionResponse typeQuestion;
     private List<AnswerResponse> answers;
 }

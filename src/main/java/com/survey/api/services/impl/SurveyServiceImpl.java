@@ -45,8 +45,7 @@ public class SurveyServiceImpl implements SurveyService {
         Survey data = surveyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Data wasn't found"));
         data.updateSurvey(survey);
-        surveyRepository.save(data);
-        return surveyMapper.entityToResponse(data);
+        return surveyMapper.entityToResponse(surveyRepository.save(data));
     }
 
     @Override
