@@ -4,8 +4,10 @@ import com.survey.api.models.dtos.save.AnswerRequest;
 import com.survey.api.models.dtos.save.AnswerUpdate;
 import com.survey.api.models.dtos.send.AnswerResponse;
 import com.survey.api.models.entities.Answer;
+import com.survey.api.models.entities.Question;
 import com.survey.api.models.mappers.AnswerMapper;
 import com.survey.api.repositories.AnswerRepository;
+import com.survey.api.repositories.QuestionRepository;
 import com.survey.api.services.AnswerService;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,12 @@ import java.util.List;
 public class AnswerServiceImpl implements AnswerService {
     private final AnswerRepository answerRepository;
     private final AnswerMapper answerMapper;
+    private final QuestionRepository questionRepository;
 
-    public AnswerServiceImpl(AnswerRepository answerRepository, AnswerMapper answerMapper) {
+    public AnswerServiceImpl(AnswerRepository answerRepository, AnswerMapper answerMapper, QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
         this.answerMapper = answerMapper;
+        this.questionRepository = questionRepository;
     }
 
     @Override
@@ -35,18 +39,21 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public AnswerResponse save(AnswerRequest answerRequest) {
+        Question question = questionRepository.findById(answerRequest.getQuestion())
+                .orElseThrow(() -> new RuntimeException("Question not found"));
+
         Answer answer = answerMapper.requestToAnswer(answerRequest);
+        answer.setQuestion(question);
         return answerMapper.answerToAnswerResponse(answerRepository.save(answer));
     }
 
     @Override
     public AnswerResponse update(Long id, AnswerUpdate answerUpdate) {
-        Answer answer = answerMapper.updateToAnswer(answerUpdate);
-        Answer data = answerRepository.findById(id)
+        Answer answerReceived = answerMapper.updateToAnswer(answerUpdate);
+        Answer answerFind = answerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Data wasn't found"));
-        data.updateAnswer(answer);
-        answerRepository.save(data);
-        return answerMapper.answerToAnswerResponse(data);
+        answerFind.updateAnswer(answerReceived);
+        return answerMapper.answerToAnswerResponse(answerRepository.save(answerFind));
     }
 
     @Override

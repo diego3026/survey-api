@@ -10,5 +10,5 @@ import lombok.Data;
 public class AnswerUpdate {
     @NotBlank
     private String description;
-    private Question question;
+    private Long question;
 }

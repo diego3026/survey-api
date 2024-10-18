@@ -6,11 +6,13 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class QuestionUpdate {
     @NotBlank
     private String title;
-    private Survey survey;
-    private TypeQuestion typeQuestion;
+    private Long survey;
+    private Long typeQuestion;
 }

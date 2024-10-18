@@ -3,14 +3,20 @@ spring:
     name: api
   datasource:
     # This data would be modified.
-    url: jdbc:sqlserver://surveysystem.database.windows.net:1433;database=surveysystemdb;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    url: jdbc:sqlserver://surveysystem.database.windows.net:1433;databaseName=surveysystemdb;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
     username: surveysystemadmin@surveysystem
     password: '!kBo66q}HjT#r7fieg'
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: update
-      dialect: org.hibernate.SQLServer2012Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.SQLServer2012Dialect
+
+logging:
+  level:
+    org.hibernate: debug
 
 server:
   port: 9191

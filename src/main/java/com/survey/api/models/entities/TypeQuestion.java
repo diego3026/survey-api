@@ -20,12 +20,15 @@ public class TypeQuestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "typeQuestion", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "typeQuestion")
     private List<Question> questions;
 
     public void updateTypeQuestion(TypeQuestion typeQuestion) {
-        new TypeQuestion(this.id, typeQuestion.getName(), typeQuestion.getQuestions());
+        this.setId(this.id);
+        this.setName(typeQuestion.getName());
+        this.setQuestions(typeQuestion.getQuestions());
     }
 }

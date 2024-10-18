@@ -20,11 +20,12 @@ public class Answer {
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "idQuestion")
     private Question question;
 
     public void updateAnswer(Answer answer){
-        new Answer(this.id, answer.getDescription(), answer.getQuestion());
+        this.setDescription(answer.getDescription());
+        this.setQuestion(answer.getQuestion());
     }
 }

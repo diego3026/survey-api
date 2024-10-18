@@ -9,6 +9,7 @@ import java.util.List;
 public interface TypeQuestionService {
     List<TypeQuestionResponse> findAll();
     TypeQuestionResponse findById(Long id);
+    TypeQuestionResponse findByName(String name);
     TypeQuestionResponse save(TypeQuestionRequest typeQuestionRequest);
     TypeQuestionResponse update(Long id, TypeQuestionUpdate typeQuestionUpdate);
     void deleteById(Long id);

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class TypeQuestionServiceImpl implements TypeQuestionService {
     private final TypeQuestionRepository typeQuestionRepository;
@@ -34,6 +36,15 @@ public class TypeQuestionServiceImpl implements TypeQuestionService {
     }
 
     @Override
+    public TypeQuestionResponse findByName(String name) {
+        TypeQuestion typeQuestion = typeQuestionRepository.findByName(name);
+        if (isNull(typeQuestion)){
+            throw new RuntimeException("TypeQuestion not found");
+        }
+        return typeQuestionMapper.typeQuestionToTypeQuestionResponse(typeQuestion);
+    }
+
+    @Override
     public TypeQuestionResponse save(TypeQuestionRequest typeQuestionRequest) {
         TypeQuestion typeQuestion = typeQuestionMapper.requestToTypeQuestion(typeQuestionRequest);
         return typeQuestionMapper.typeQuestionToTypeQuestionResponse(typeQuestionRepository.save(typeQuestion));
@@ -44,8 +55,7 @@ public class TypeQuestionServiceImpl implements TypeQuestionService {
         TypeQuestion typeQuestion = typeQuestionMapper.updateToTypeQuestion(typeQuestionUpdate);
         TypeQuestion data = typeQuestionRepository.findById(id).orElseThrow(() -> new RuntimeException("Data wasn't found"));
         data.updateTypeQuestion(typeQuestion);
-        typeQuestionRepository.save(data);
-        return typeQuestionMapper.typeQuestionToTypeQuestionResponse(data);
+        return typeQuestionMapper.typeQuestionToTypeQuestionResponse(typeQuestionRepository.save(data));
     }
 
     @Override
