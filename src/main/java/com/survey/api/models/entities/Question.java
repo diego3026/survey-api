@@ -33,6 +33,9 @@ public class Question{
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers;
 
+    @OneToMany
+    private List<UserQuestion> userQuestions;
+
     public void updateQuestion(Question question) {
         this.setId(this.id);
         this.setTitle(question.getTitle());

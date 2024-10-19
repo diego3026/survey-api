@@ -8,9 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -40,6 +38,9 @@ public class User {
 
     @ManyToMany(mappedBy = "users")
     private List<Survey> surveys;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserQuestion> userQuestions;
 
     public void updateUser(User user){
         this.setId(id);
