@@ -25,6 +25,11 @@ public class Survey {
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Question> questions;
 
+    @ManyToMany
+    @JoinTable(name = "surveysUsers", joinColumns = @JoinColumn(name = "idSurvey", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "idUser", nullable = false))
+    private List<User> users;
+
     public void updateSurvey(Survey survey){
         this.setId(this.id);
         this.setTitle(survey.getTitle());
