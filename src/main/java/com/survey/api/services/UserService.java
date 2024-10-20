@@ -1,6 +1,5 @@
 package com.survey.api.services;
 
-import com.survey.api.models.dtos.auth.ResponseAuth;
 import com.survey.api.models.dtos.save.UserUpdate;
 import com.survey.api.models.dtos.send.UserResponse;
 

@@ -39,15 +39,7 @@ public class SurveyController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAll(){
-        try{
-            return ResponseEntity.ok(surveyService.findAll());
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(surveyService.findAll());
     }
 
     @Operation(
@@ -60,15 +52,7 @@ public class SurveyController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable Long id){
-        try {
-            return ResponseEntity.ok(surveyService.findById(id));
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(surveyService.findById(id));
     }
 
     @Operation(
@@ -81,15 +65,7 @@ public class SurveyController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@RequestBody SurveyRequest surveyDtoSave){
-        try {
-            return ResponseEntity.ok(surveyService.save(surveyDtoSave));
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(surveyService.save(surveyDtoSave));
     }
 
     @Operation(
@@ -102,15 +78,7 @@ public class SurveyController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody SurveyUpdate surveyDtoUpdate){
-        try {
-            return ResponseEntity.ok(surveyService.update(id, surveyDtoUpdate));
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(surveyService.update(id, surveyDtoUpdate));
     }
 
     @Operation(
@@ -123,16 +91,8 @@ public class SurveyController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteById(@PathVariable Long id){
-        try {
-            surveyService.deleteById(id);
-            return ResponseEntity.ok("Survey deleted");
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        surveyService.deleteById(id);
+        return ResponseEntity.ok("Survey deleted");
     }
 
     @Operation(
@@ -145,15 +105,7 @@ public class SurveyController {
     @DeleteMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteAll(){
-        try {
-            surveyService.deleteAll();
-            return ResponseEntity.ok("Surveys deleted");
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        surveyService.deleteAll();
+        return ResponseEntity.ok("Surveys deleted");
     }
 }

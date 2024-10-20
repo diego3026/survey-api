@@ -13,14 +13,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Preguntas", description = "Recurso para manejar las preguntas")
 @RestController
 @RequestMapping("/questions")
-@Validated
 public class QuestionController {
     private final QuestionService questionService;
 
@@ -38,15 +35,7 @@ public class QuestionController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAll() {
-        try {
-            return ResponseEntity.ok(questionService.findAll());
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(questionService.findAll());
     }
 
     @Operation(
@@ -59,15 +48,7 @@ public class QuestionController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable long id) {
-        try {
-            return ResponseEntity.ok(questionService.findById(id));
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(questionService.findById(id));
     }
 
     @Operation(
@@ -80,15 +61,7 @@ public class QuestionController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@RequestBody QuestionRequest questionRequest) {
-        try {
-            return ResponseEntity.ok(questionService.save(questionRequest));
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(questionService.save(questionRequest));
     }
 
     @Operation(
@@ -101,15 +74,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@PathVariable long id, @RequestBody QuestionUpdate questionUpdate) {
-        try {
-            return ResponseEntity.ok(questionService.update(id,questionUpdate));
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(questionService.update(id, questionUpdate));
     }
 
     @Operation(
@@ -117,22 +82,13 @@ public class QuestionController {
             description = "El administrador podrá eliminar la pregunta",
             tags = { "Delete" })
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = QuestionResponse.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = String.class), mediaType = "application/json") }),
             @ApiResponse(responseCode = "400", content = { @Content(schema = @Schema(implementation = String.class), mediaType = "application/json") })})
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteById(@PathVariable long id){
-        try {
-            questionService.deleteById(id);
-            return ResponseEntity.ok("Question deleted");
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-
+    public ResponseEntity<?> deleteById(@PathVariable long id) {
+        questionService.deleteById(id);
+        return ResponseEntity.ok("Question deleted");
     }
 
     @Operation(
@@ -140,20 +96,12 @@ public class QuestionController {
             description = "El administrador podrá eliminar todas las preguntas",
             tags = { "Delete" })
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = QuestionResponse.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = String.class), mediaType = "application/json") }),
             @ApiResponse(responseCode = "400", content = { @Content(schema = @Schema(implementation = String.class), mediaType = "application/json") })})
     @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteAll() {
-        try {
-            questionService.deleteAll();
-            return ResponseEntity.ok("Questions deleted");
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        questionService.deleteAll();
+        return ResponseEntity.ok("Questions deleted");
     }
 }

@@ -25,10 +25,12 @@ spring:
         #dialect: org.hibernate.dialect.PostgreSQLDialect
         dialect: org.hibernate.SQLServer2012Dialect
 
-
 logging:
   level:
+    org.springframework:
+      security: debug
     org.hibernate: debug
+
 
 server:
   port: 9191

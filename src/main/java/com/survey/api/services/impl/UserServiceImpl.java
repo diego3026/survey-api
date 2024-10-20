@@ -7,12 +7,9 @@ import com.survey.api.models.mappers.UserMapper;
 import com.survey.api.repositories.UserRepository;
 import com.survey.api.services.UserService;
 import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
-
-@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -26,8 +23,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponse> findAll() {
         List<User> users = userRepository.findAll();
-        System.out.println(users.get(0));
-        log.info(users.get(0).toString());
         return users.stream().map(userMapper::userToUserResponse).toList();
     }
 

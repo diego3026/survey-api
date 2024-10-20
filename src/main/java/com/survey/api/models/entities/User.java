@@ -36,17 +36,16 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
 
-    @ManyToMany(mappedBy = "users")
-    private List<Survey> surveys;
-
     @OneToMany(mappedBy = "user")
     private List<UserQuestion> userQuestions;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserSurvey> userSurveys;
 
     public void updateUser(User user){
         this.setId(id);
         this.setEmail(user.getEmail());
         this.setPassword(user.getPassword());
-        this.setSurveys(this.getSurveys());
         this.setRole(this.getRole());
     }
 }
