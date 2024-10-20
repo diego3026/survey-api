@@ -33,7 +33,7 @@ public class Question{
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers;
 
-    @OneToMany
+    @OneToMany(mappedBy = "question")
     private List<UserQuestion> userQuestions;
 
     public void updateQuestion(Question question) {

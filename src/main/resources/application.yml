@@ -3,31 +3,34 @@ spring:
     name: api
     security:
       jwt:
-        secret-key: f5f089c5324dcbf107086b08bb7f874bcbf683745484b6684df6d7fc9e591fea
+        secret-key: ${SPRING_APPLICATION_SECURITY_JWT_SECRET_KEY}
         expiration: 86400000
         refresh-token:
           expiration: 604800000
 
   datasource:
     # This data would be modified.
-    #url: jdbc:sqlserver://surveysystem.database.windows.net:1433;databaseName=surveysystemdb;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
-    #username: surveysystemadmin@surveysystem
-    #password: '!kBo66q}HjT#r7fieg'
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: 1234
+    url: jdbc:sqlserver://surveysystem.database.windows.net:1433;databaseName=surveysystemdb;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    username: surveysystemadmin@surveysystem
+    password: '!kBo66q}HjT#r7fieg'
+    #url: jdbc:postgresql://localhost:5432/postgres
+    #username: postgres
+    #password: 1234
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        #dialect: org.hibernate.SQLServer2012Dialect
+        #dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.SQLServer2012Dialect
 
 logging:
   level:
+    org.springframework:
+      security: debug
     org.hibernate: debug
+
 
 server:
   port: 9191

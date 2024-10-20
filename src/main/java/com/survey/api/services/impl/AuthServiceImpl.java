@@ -39,12 +39,14 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseAuth login(LoginRequest loginRequest) {
-        User user = userRepository.findByUsernameOrEmail(loginRequest.getUsername(),loginRequest.getEmail())
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByUsernameOrEmail(loginRequest.getUsername(), loginRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String loginIdentifier = loginRequest.getUsername() != null ? loginRequest.getUsername() : loginRequest.getEmail();
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        user.getEmail(),
+                        loginIdentifier,
                         loginRequest.getPassword()
                 )
         );
@@ -57,65 +59,64 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseAuth register(RegisterRequest registerRequest) {
-        if(userRepository.existsByEmail(registerRequest.getEmail())) {
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new RuntimeException("Email ya registrado");
         }
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
             throw new RuntimeException("Username ya registrado");
         }
 
-        Role role;
-        try{
-            role = roleRepository.findRoleByName(registerRequest.getRole()).orElseThrow(() -> new RuntimeException("Role not found"));
-        } catch (RuntimeException e) {
-            role = new Role();
-            role.setName(registerRequest.getRole());
-            roleRepository.save(role);
-        }
+        Role role = roleRepository.findRoleByName(registerRequest.getRole()).orElseThrow(() -> new RuntimeException("Role not found"));
 
         User user = authMapper.registerRequestToUser(registerRequest);
         user.setRole(role);
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
         User userSaved = userRepository.save(user);
+
         var jwtToken = jwtservice.generateToken(userSaved);
         var refreshToken = jwtservice.generateRefreshToken(userSaved);
-        UserResponse userResponse = userMapper.userToUserResponse(userRepository.save(userSaved));
+        UserResponse userResponse = userMapper.userToUserResponse(userSaved);
         TokenResponse tokenResponse = TokenResponse.builder().access(jwtToken).refresh(refreshToken).build();
+
         return ResponseAuth.builder().user(userResponse).token(tokenResponse).build();
     }
 
     @Override
     public void updateRole(Long idAdmin, UpdateRole updateRole) {
-        User userAdmin = userRepository.findById(idAdmin).orElseThrow(()-> new RuntimeException("User Admin not found"));
-        if(!userAdmin.getRole().getName().equals(ERole.ADMIN)){
+        User userAdmin = userRepository.findById(idAdmin)
+                .orElseThrow(() -> new RuntimeException("User Admin not found"));
+
+        if (!userAdmin.getRole().getName().equals(ERole.ADMIN)) {
             throw new RuntimeException("User is not admin");
         }
 
-        User user = userRepository.findById(updateRole.getIdUser()).orElseThrow(()->new RuntimeException("User not found"));
+        User user = userRepository.findById(updateRole.getIdUser())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         ERole newRole = ERole.valueOf(updateRole.getRole());
-        Role roleFind = roleRepository.findRoleByName(newRole).orElseThrow(()-> new RuntimeException("Role not found"));
+        Role roleFind = roleRepository.findRoleByName(newRole)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
         user.setRole(roleFind);
         userRepository.save(user);
     }
 
     @Override
     public TokenResponse refreshToken(String refresh) {
-        if(refresh == null){
+        if (refresh == null) {
             throw new RuntimeException("Refresh token is null");
         }
 
         final String userEmail = jwtservice.extractEmail(refresh);
 
-        if (userEmail == null){
+        if (userEmail == null) {
             throw new IllegalArgumentException("Invalid refresh token");
         }
 
         final User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new UsernameNotFoundException(userEmail));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
 
-        if(!jwtservice.isTokenValid(refresh,user)){
-            throw new IllegalArgumentException("Invalided Refresh token");
+        if (!jwtservice.isTokenValid(refresh, user)) {
+            throw new IllegalArgumentException("Invalid refresh token");
         }
 
         final String token = jwtservice.generateToken(user);

@@ -1,6 +1,7 @@
 package com.survey.api.services;
 
 import com.survey.api.models.entities.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
 

@@ -5,9 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserQuestionResponse {
+public class UserSurveyResponse {
     private Long id;
     private UserResponse user;
-    private QuestionResponse question;
-    private String answer;
+    private SurveyResponse survey;
 }

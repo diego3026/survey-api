@@ -8,10 +8,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Collections;
 
 @Configuration
 public class AppConfig {
@@ -24,11 +27,12 @@ public class AppConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> {
-            final User user = userRepository.findByUsernameOrEmail(email,email)
+            final User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             return org.springframework.security.core.userdetails.User.builder()
-                    .username(user.getUsername())
+                    .username(user.getEmail())
                     .password(user.getPassword())
+                    .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName())))
                     .build();
         };
     }

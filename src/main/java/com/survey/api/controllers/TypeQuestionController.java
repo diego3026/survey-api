@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Tipos de preguntas", description = "Recurso para manejar los tipos de preguntas")
 @RestController
 @RequestMapping("/typesQuestions")
-@Validated
 public class TypeQuestionController {
     private final TypeQuestionService typeQuestionService;
 
@@ -38,15 +37,7 @@ public class TypeQuestionController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAll(){
-        try{
-            return ResponseEntity.ok(typeQuestionService.findAll());
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(typeQuestionService.findAll());
     }
 
     @Operation(
@@ -59,15 +50,7 @@ public class TypeQuestionController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable Long id){
-        try {
-            return ResponseEntity.ok(typeQuestionService.findById(id));
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(typeQuestionService.findById(id));
     }
 
     @Operation(
@@ -80,15 +63,7 @@ public class TypeQuestionController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> save(@RequestBody TypeQuestionRequest typeQuestionRequest){
-        try{
-            return ResponseEntity.ok(typeQuestionService.save(typeQuestionRequest));
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(typeQuestionService.save(typeQuestionRequest));
     }
 
     @Operation(
@@ -101,15 +76,7 @@ public class TypeQuestionController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody TypeQuestionUpdate typeQuestionUpdate){
-        try {
-            return ResponseEntity.ok(typeQuestionService.update(id,typeQuestionUpdate));
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(typeQuestionService.update(id, typeQuestionUpdate));
     }
 
     @Operation(
@@ -122,17 +89,8 @@ public class TypeQuestionController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id){
-        try{
-            typeQuestionService.deleteById(id);
-            return ResponseEntity.ok("TypeQuestion deleted");
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-
+        typeQuestionService.deleteById(id);
+        return ResponseEntity.ok("TypeQuestion deleted");
     }
 
     @Operation(
@@ -145,16 +103,7 @@ public class TypeQuestionController {
     @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteAll(){
-        try{
-            typeQuestionService.deleteAll();
-            return ResponseEntity.ok("TypesQuestions deleted");
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-
+        typeQuestionService.deleteAll();
+        return ResponseEntity.ok("TypesQuestions deleted");
     }
 }

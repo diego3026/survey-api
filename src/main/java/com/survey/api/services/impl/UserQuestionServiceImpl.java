@@ -51,11 +51,8 @@ public class UserQuestionServiceImpl implements UserQuestionService {
     @Override
     public UserQuestionResponse save(UserQuestionRequest userQuestionRequest) {
         UserQuestion userQuestion = userQuestionMapper.userQuestionRequestToUserQuestion(userQuestionRequest);
-        Long idUser = userQuestion.getUser().getId();
-        Long idQuestion = userQuestion.getQuestion().getId();
-
-        User user = userRepository.findById(idUser).orElseThrow(() -> new RuntimeException("User not found"));
-        Question question = questionRepository.findById(idQuestion).orElseThrow(() -> new RuntimeException("Question not found"));
+        User user = userRepository.findById(userQuestionRequest.getUser()).orElseThrow(() -> new RuntimeException("User not found"));
+        Question question = questionRepository.findById(userQuestionRequest.getQuestion()).orElseThrow(() -> new RuntimeException("Question not found"));
 
         userQuestion.setUser(user);
         userQuestion.setQuestion(question);
@@ -67,13 +64,17 @@ public class UserQuestionServiceImpl implements UserQuestionService {
         UserQuestion userReceived = userQuestionMapper.userQuestionUpdateToUserQuestion(userQuestionUpdate);
         UserQuestion userFind = userQuestionRepository.findById(id).orElseThrow(() -> new RuntimeException("UserQuestion not found"));
         userFind.updateUserQuestion(userReceived);
+        User user = userRepository.findById(userQuestionUpdate.getUser()).orElseThrow(() -> new RuntimeException("User not found"));
+        Question question = questionRepository.findById(userQuestionUpdate.getQuestion()).orElseThrow(() -> new RuntimeException("Question not found"));
+        userFind.setQuestion(question);
+        userFind.setUser(user);
         return userQuestionMapper.userQuestionToUserQuestionResponse(userQuestionRepository.save(userFind));
     }
 
     @Override
     public void deleteById(Long id) {
         UserQuestion userQuestion = userQuestionRepository.findById(id).orElseThrow(() -> new RuntimeException("UserQuestion not found"));
-        userRepository.deleteById(userQuestion.getId());
+        userQuestionRepository.deleteById(id);
     }
 
     @Override
