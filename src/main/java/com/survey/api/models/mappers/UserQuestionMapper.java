@@ -9,11 +9,11 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserQuestionMapper {
-    @Mapping(source = "user.id", target = "user")
-    @Mapping(source = "question.id", target = "question")
+    @Mapping(source = "user", target = "user.id")
+    @Mapping(source = "question", target = "question.id")
     UserQuestion userQuestionRequestToUserQuestion(UserQuestionRequest userQuestionRequest);
-    @Mapping(source = "user.id", target = "user")
-    @Mapping(source = "question.id", target = "question")
+    @Mapping(source = "user", target = "user.id")
+    @Mapping(source = "question", target = "question.id")
     UserQuestion userQuestionUpdateToUserQuestion(UserQuestionUpdate userQuestionUpdate);
     UserQuestion userQuestionResponseToUserQuestion(UserQuestionResponse userQuestionResponse);
     UserQuestionResponse userQuestionToUserQuestionResponse(UserQuestion userQuestion);

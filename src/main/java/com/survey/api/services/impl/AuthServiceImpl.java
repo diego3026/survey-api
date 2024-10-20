@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseAuth login(LoginRequest loginRequest) {
         User user = userRepository.findByUsernameOrEmail(loginRequest.getUsername(),loginRequest.getEmail())
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                        .orElseThrow(() -> new RuntimeException("User not found"));
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

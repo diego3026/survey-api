@@ -3,7 +3,6 @@ package com.survey.api.controllers;
 import com.survey.api.models.dtos.save.UserQuestionRequest;
 import com.survey.api.models.dtos.save.UserQuestionUpdate;
 import com.survey.api.models.dtos.send.UserQuestionResponse;
-import com.survey.api.models.dtos.send.UserResponse;
 import com.survey.api.services.UserQuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

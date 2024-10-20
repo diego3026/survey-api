@@ -12,11 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Autenticacion", description = "Recurso para manejar la autenticacion")
 @RestController
 @RequestMapping("/auth")
+@Validated
 public class AuthController {
     private final AuthService authService;
 
@@ -56,15 +58,7 @@ public class AuthController {
     @PostMapping("/register")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     private ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest){
-        try {
-            return ResponseEntity.ok(authService.register(registerRequest));
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(authService.register(registerRequest));
     }
 
     @Operation(
@@ -77,15 +71,7 @@ public class AuthController {
     @PostMapping("/login")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     private ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
-        try{
-            return ResponseEntity.ok(authService.login(loginRequest));
-        } catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(authService.login(loginRequest));
     }
 
     @Operation(
