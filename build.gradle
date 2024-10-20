@@ -54,8 +54,6 @@ dependencies {
 
 	//Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui'
-	implementation 'org.springdoc:springdoc-openapi-ui'
-	implementation 'org.springdoc:springdoc-openapi-webmvc-core'
 
 	//env
 	implementation 'io.github.cdimascio:dotenv-java'
