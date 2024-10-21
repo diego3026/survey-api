@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ApiApplication {
 
 	public static void main(String[] args) {
-		Dotenv dotenv = Dotenv.load();
 		SpringApplication.run(ApiApplication.class, args);
 	}
 
