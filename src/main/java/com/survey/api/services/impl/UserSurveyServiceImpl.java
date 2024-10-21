@@ -2,11 +2,13 @@ package com.survey.api.services.impl;
 
 import com.survey.api.models.dtos.save.UserSurveyRequest;
 import com.survey.api.models.dtos.save.UserSurveyUpdate;
+import com.survey.api.models.dtos.send.SurveyResponse;
 import com.survey.api.models.dtos.send.UserSurveyResponse;
 import com.survey.api.models.entities.Survey;
 import com.survey.api.models.entities.User;
 import com.survey.api.models.entities.UserQuestion;
 import com.survey.api.models.entities.UserSurvey;
+import com.survey.api.models.mappers.SurveyMapper;
 import com.survey.api.models.mappers.UserSurveyMapper;
 import com.survey.api.repositories.SurveyRepository;
 import com.survey.api.repositories.UserRepository;
@@ -22,18 +24,30 @@ public class UserSurveyServiceImpl implements UserSurveyService {
     private final UserSurveyMapper userSurveyMapper;
     private final UserRepository userRepository;
     private final SurveyRepository surveyRepository;
+    private final SurveyMapper surveyMapper;
 
-    public UserSurveyServiceImpl(UserSurveyRepository userSurveyRepository, UserSurveyMapper userSurveyMapper, UserRepository userRepository, UserRepository userRepository1, SurveyRepository surveyRepository) {
+    public UserSurveyServiceImpl(UserSurveyRepository userSurveyRepository, UserSurveyMapper userSurveyMapper, UserRepository userRepository, UserRepository userRepository1, SurveyRepository surveyRepository, SurveyMapper surveyMapper) {
         this.userSurveyRepository = userSurveyRepository;
         this.userSurveyMapper = userSurveyMapper;
         this.userRepository = userRepository1;
         this.surveyRepository = surveyRepository;
+        this.surveyMapper = surveyMapper;
     }
 
     @Override
     public List<UserSurveyResponse> findAll() {
         List<UserSurvey> userSurveys = userSurveyRepository.findAll();
         return userSurveys.stream().map(userSurveyMapper::userSurveyToUserSurveyResponse).toList();
+    }
+
+    @Override
+    public List<SurveyResponse> findSurveysByUser(Long idUser) {
+        User user = userRepository.findById(idUser).orElseThrow(() -> new RuntimeException("User not found"));
+        List<UserSurvey> userSurveys = userSurveyRepository.findUserSurveyByUser(user);
+
+        return userSurveys.stream().map(userSurvey -> {
+            return surveyMapper.entityToResponse(userSurvey.getSurvey());
+        }).toList();
     }
 
     @Override

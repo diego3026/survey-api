@@ -27,6 +27,11 @@ public class UserSurveyController {
         return ResponseEntity.ok(userSurveyService.findById(id));
     }
 
+    @GetMapping("/{idUser}/surveys")
+    private ResponseEntity<?> findSurveysByUser(@PathVariable Long idUser){
+        return ResponseEntity.ok(userSurveyService.findSurveysByUser(idUser));
+    }
+
     @PostMapping
     private ResponseEntity<?> save(@RequestBody UserSurveyRequest userSurveyRequest){
         return ResponseEntity.ok(userSurveyService.save(userSurveyRequest));
